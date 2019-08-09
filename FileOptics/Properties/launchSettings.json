@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "FileOptics": {
+      "commandName": "Project",
+      "commandLineArgs": "hi_utf8.txt",
+      "workingDirectory": "D:\\repos\\FileOptics"
+    }
+  }
+}
