@@ -24,6 +24,12 @@ steps:
 #     projects: '**/*.Test.csproj'
 
 - task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    command: build
+    configuration: release
+
+- task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
   inputs:
     command: pack
