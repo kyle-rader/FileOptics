@@ -1,0 +1,17 @@
+[*.sln]
+end_of_line = crlf
+
+[*]
+end_of_line = lf
+
+[utf_8.txt]
+charset = utf-8
+
+[utf_8_bom.txt]
+charset = utf-8-bom
+
+[utf_16_be.txt]
+charset = utf-16be
+
+[utf_16_le.txt]
+charset = utf-16le
