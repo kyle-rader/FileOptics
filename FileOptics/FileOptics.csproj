@@ -1,11 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Id>FileOptics</Id>
+    <PackageId>FileOptics</PackageId>
     <Version>0.1.0</Version>
+    <Authors>Kyle W. Rader</Authors>
     
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+
+    <PackAsTool>true</PackAsTool>
+    <PackageOutputPath>../</PackageOutputPath>
+    <ToolCommandName>fo</ToolCommandName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,5 +19,4 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="System.IO.Abstractions" Version="6.0.17" />
   </ItemGroup>
-
 </Project>

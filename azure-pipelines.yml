@@ -35,7 +35,7 @@ steps:
     ArtifactName: FileOptics
 
 - task: DotNetCoreCLI@2
-  displayName: 'Deploy nuget'
+  displayName: 'Deploy To Nuget.org'
   condition: |
     and(
         ne(variables['Build.Reason'], 'PullRequest'),
@@ -44,5 +44,7 @@ steps:
     )
   inputs:
     command: push
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    nugetFeedType: 'external'
     publishVstsFeed: nuget.org
+    externalEndPoint: 'kylewrader-nuget'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'

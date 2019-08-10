@@ -3,6 +3,7 @@ end_of_line = crlf
 
 [*]
 end_of_line = lf
+charset = utf-8
 
 [utf_8.txt]
 charset = utf-8
