@@ -1,0 +1,48 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-2019'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Use dotnet sdk 3.0.100-preview6-012264'
+  inputs:
+    version: '3.0.100-preview6-012264'
+    includePreviewVersions: true
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
+  inputs:
+    command: restore
+    projects: FileOptics.sln
+
+# - task: DotNetCoreCLI@2
+#   displayName: 'dotnet test'
+#   inputs:
+#     command: test
+#     projects: '**/*.Test.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet pack'
+  inputs:
+    command: pack
+    projects: 'FileOptics/FileOptics.csproj'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Build Artifacts'
+  inputs:
+    ArtifactName: FileOptics
+
+- task: DotNetCoreCLI@2
+  displayName: 'Deploy nuget'
+  condition: |
+    and(
+        ne(variables['Build.Reason'], 'PullRequest'),
+        not(contains(variables['Build.SourceVersionMessage'], 'skip-deploy')),
+        or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['deploy'], 'true'))
+    )
+  inputs:
+    command: push
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    publishVstsFeed: nuget.org
