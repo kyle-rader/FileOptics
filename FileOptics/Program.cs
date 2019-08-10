@@ -11,13 +11,25 @@ namespace FileOptics
     {
         static void Main(string[] args)
         {
+            try
+            {
+                Environment.Exit(BuildApp().Execute(args));
+            }
+            catch (UnrecognizedCommandParsingException ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+            }
+        }
+
+        static CommandLineApplication BuildApp()
+        {
             var app = new CommandLineApplication<Cli>(throwOnUnexpectedArg: false);
-            app.Conventions.UseDefaultConventions();
             app.HelpOption("-h|--help");
             app.VersionOption("-v|--version", GetVersion());
-
-            app.Conventions.UseConstructorInjection(Services());
-            Environment.Exit(app.Execute(args));
+            app.Conventions
+                .UseConstructorInjection(Services())
+                .UseDefaultConventions();
+            return app;
         }
 
         static string GetVersion()
@@ -30,6 +42,8 @@ namespace FileOptics
         {
             return new ServiceCollection()
                 .AddSingleton<IFileSystem, FileSystem>()
+                .AddSingleton<IConsole>(PhysicalConsole.Singleton)
+                .AddTransient<HexWriter>()
                 .BuildServiceProvider();
         }
     }

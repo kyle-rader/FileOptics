@@ -37,7 +37,7 @@ namespace FileOptics
             this.fs = fs;
         }
 
-        public void Write(string file, bool withReadableLine, int sepSpace = 2)
+        public void Write(string file, bool withReadableLine, int sepSpace = 2, bool printBom = true)
         {
             this.sepSpace = sepSpace;
             this.sep = new string(' ', sepSpace);
@@ -47,7 +47,7 @@ namespace FileOptics
 
             using (var reader = fs.File.OpenRead(file))
             {
-                CheckBom(reader);
+                CheckBom(reader, printBom);
                 while ((value = reader.ReadByte()) != -1)
                 {
                     if (values.Count == 0)
@@ -76,32 +76,38 @@ namespace FileOptics
             }
         }
 
-        private void CheckBom(Stream reader)
+        private void CheckBom(Stream reader, bool print)
         {
             int[] bom = new int[3];
             for (var i = 0; i < 3; i++)
             {
                 bom[i] = reader.ReadByte();
             }
+            string message = string.Empty;
 
             if (bom[0] == 0xEF && bom[1] == 0xBB && bom[2] == 0xBF)
             {
-                console.WriteLine("{0:X2} {1:X2} {2:X2} (UTF-8 BOM)", bom[0], bom[1], bom[2]);
+                message = string.Format("{0:X2} {1:X2} {2:X2} (UTF-8 BOM)", bom[0], bom[1], bom[2]);
             }
             else if (bom[0] == 0xFE && bom[1] == 0xFF)
             {
-                console.WriteLine("{0:X2} {1:X2} (UTF-16 Big Endian BOM)", bom[0], bom[1]);
+                message = string.Format("{0:X2} {1:X2} (UTF-16 Big Endian BOM)", bom[0], bom[1]);
                 reader.Seek(-1, SeekOrigin.Current); // Seek back 1 byte
             }
             else if (bom[0] == 0xFF && bom[1] == 0xFE)
             {
-                console.WriteLine("{0:X2} {1:X2} (UTF-16 Little Endian BOM)", bom[0], bom[1]);
+                message = string.Format("{0:X2} {1:X2} (UTF-16 Little Endian BOM)", bom[0], bom[1]);
                 reader.Seek(-1, SeekOrigin.Current); // Seek back 1 byte
             }
             else
             {
                 // Reset at start of stream.
+                message = "No visible BOM";
                 reader.Seek(0, SeekOrigin.Begin);
+            }
+            if (print)
+            {
+                console.WriteLine(message);
             }
         }
 
