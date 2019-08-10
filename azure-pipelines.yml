@@ -34,7 +34,11 @@ steps:
   inputs:
     ArtifactName: FileOptics
 
-- task: DotNetCoreCLI@2
+- task: NuGetToolInstaller@1
+  inputs:
+    versionSpec: '5.1.0'
+
+- task: NuGetCommand@2
   displayName: 'Deploy To Nuget.org'
   condition: |
     and(
