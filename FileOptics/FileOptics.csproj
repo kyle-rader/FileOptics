@@ -7,7 +7,7 @@
     <Authors>Kyle W. Rader</Authors>
     
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <PackAsTool>true</PackAsTool>
     <PackageOutputPath>../</PackageOutputPath>
@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.4.0-beta.81" />
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.5.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="System.IO.Abstractions" Version="6.0.17" />
   </ItemGroup>
