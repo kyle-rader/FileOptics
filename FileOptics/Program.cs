@@ -1,4 +1,4 @@
-﻿using McMaster.Extensions.CommandLineUtils;
+using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics;
@@ -9,21 +9,24 @@ namespace FileOptics
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             try
             {
-                Environment.Exit(BuildApp().Execute(args));
+                int returnCode = BuildApp().Execute(args);
+                Environment.Exit(returnCode);
+                return returnCode;
             }
             catch (UnrecognizedCommandParsingException ex)
             {
                 Console.Error.WriteLine(ex.Message);
+                return 1;
             }
         }
 
         static CommandLineApplication BuildApp()
         {
-            var app = new CommandLineApplication<Cli>(throwOnUnexpectedArg: false);
+            var app = new CommandLineApplication<Cli>();
             app.HelpOption("-h|--help");
             app.VersionOption("-v|--version", GetVersion());
             app.Conventions

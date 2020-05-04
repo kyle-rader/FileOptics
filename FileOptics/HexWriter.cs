@@ -1,5 +1,4 @@
-﻿using McMaster.Extensions.CommandLineUtils;
-using System;
+using McMaster.Extensions.CommandLineUtils;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
@@ -12,7 +11,6 @@ namespace FileOptics
     {
         private readonly IConsole console;
         private readonly IFileSystem fs;
-        private int sepSpace = 2;
         private string sep;
         private bool withReadableLine;
         private int lineNumber = 0;
@@ -37,9 +35,8 @@ namespace FileOptics
             this.fs = fs;
         }
 
-        public void Write(string file, bool withReadableLine, int sepSpace = 2, bool printBom = true)
+        public void Write(string file, bool withReadableLine, int sepSpace, bool printBom)
         {
-            this.sepSpace = sepSpace;
             this.sep = new string(' ', sepSpace);
             this.withReadableLine = withReadableLine;
 

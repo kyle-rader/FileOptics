@@ -1,4 +1,4 @@
-﻿using McMaster.Extensions.CommandLineUtils;
+using McMaster.Extensions.CommandLineUtils;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -25,8 +25,8 @@ namespace FileOptics
 
         [Option("-s|--sep <SEP>",
             CommandOptionType.SingleValue,
-            Description = "The amount of spaces to separator each hex value by.\n                       Default: 2\n")]
-        int SeparatorLength { get; set; } = 2;
+            Description = "The amount of spaces to separator each hex value by.\n                       Default: 1\n")]
+        int SeparatorLength { get; set; } = 1;
 
         [Option("--no-bom",
             CommandOptionType.NoValue,
