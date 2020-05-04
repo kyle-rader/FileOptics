@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Id>FileOptics</Id>
     <PackageId>FileOptics</PackageId>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
     <Authors>Kyle W. Rader</Authors>
     
     <OutputType>Exe</OutputType>
