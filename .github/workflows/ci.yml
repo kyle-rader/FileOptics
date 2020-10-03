@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  pull_request:
+      branches: [ master ]
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    strategy:
+        fail-fast: false
+        matrix:
+          os: [windows-latest, macos-latest, ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Clone
+      uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.402
+
+    - name: Restore
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Unit Test
+      run: dotnet test --no-restore --verbosity normal
+
+    - name: Package
+      run: dotnet pack -c release FileOptics/FileOptics.csproj
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: package
+        path: "*.nupkg"
+
+  publish:
+    if: equals(github.ref, 'refs/head/master')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download artifact
+      with:
+        name: package
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.402
+
+    - name: Publish
+      env:
+        FEED: "https://api.nuget.org/v3/index.json"
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      run: dotnet nuget push FileOptics*.nupkg --api-key "$NUGET_API_KEY" --source --source "$FEED"
