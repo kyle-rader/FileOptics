@@ -61,4 +61,4 @@ jobs:
       env:
         FEED: "https://api.nuget.org/v3/index.json"
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-      run: dotnet nuget push FileOptics*.nupkg --api-key "$NUGET_API_KEY" --source --source "$FEED"
+      run: dotnet nuget push FileOptics*.nupkg --api-key "$NUGET_API_KEY" --source "$FEED"
