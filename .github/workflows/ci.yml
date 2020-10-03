@@ -43,7 +43,7 @@ jobs:
         path: "*.nupkg"
 
   publish:
-    if: equals(github.ref, 'refs/head/master')
+    if: ${{github.ref == 'refs/head/master' }}
     needs: build
     runs-on: ubuntu-latest
     steps:
