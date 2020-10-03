@@ -36,10 +36,10 @@ jobs:
     - name: Package
       run: dotnet pack -c release FileOptics/FileOptics.csproj
 
-    - name: Upload artifact
+    - name: Upload artifact from ubuntu
       uses: actions/upload-artifact@v2
       with:
-        name: package
+        name: package-${{matrix.os}}
         path: "*.nupkg"
 
   publish:
@@ -50,7 +50,7 @@ jobs:
     - name: Download artifact
       uses: actions/download-artifact@v2
       with:
-        name: package
+        name: package-ubuntu-latest
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
