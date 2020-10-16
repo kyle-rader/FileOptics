@@ -2,6 +2,8 @@
 
 This is a command line interface (cli) for looking at files and their bytes.
 
+![screenshot](img/screenshot-fileoptics.png)
+
 ## Installation
 
 This tool requires the [`dotnet` cli tool](https://dotnet.microsoft.com/learn/dotnet/hello-world-tutorial/install) be installed.
