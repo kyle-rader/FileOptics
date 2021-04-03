@@ -1,7 +1,6 @@
 using McMaster.Extensions.CommandLineUtils;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace FileOptics
 {
