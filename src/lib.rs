@@ -1,12 +1,23 @@
-use std::io::Read;
+use std::io::{Read, Write};
 
-pub fn hex_print(input: Box<dyn Read>) {
-    input.bytes().for_each(|b| {
+use colored::Colorize;
+
+pub fn hex_print(input: impl Read, target: &mut impl Write, readable: bool) -> std::io::Result<()> {
+    for b in input.bytes() {
         if let Ok(b) = b {
-            print!("{:02x} ", b);
+            let output = format!("{:02x}", b);
+            let output = match b {
+                b'\r' | b'\n' => output.color(colored::Color::Magenta),
+                b' ' | b'\t' => output.color(colored::Color::Green),
+                _ => output.normal(),
+            };
+
+            write!(target, "{output} ")?;
             if b == b'\n' {
-                println!();
+                writeln!(target)?;
             }
         }
-    });
+    }
+
+    Ok(())
 }

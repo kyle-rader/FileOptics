@@ -13,16 +13,14 @@ struct Args {
 }
 
 /// Return an input source from either a file or stdin
-fn input(file: Option<String>) -> Result<Box<dyn Read>, String> {
+fn input(file: Option<String>) -> Result<impl Read, std::io::Error> {
     match file {
-        Some(file) => File::open(file)
-            .map(|f| Box::new(f) as Box<dyn Read>)
-            .map_err(|e| e.to_string()),
+        Some(file) => File::open(file).map(|f| Box::new(f) as Box<dyn Read>),
         None => Ok(Box::new(std::io::stdin())),
     }
 }
 
-fn main() {
+fn main() -> anyhow::Result<()> {
     let args = Args::parse();
 
     if let Some(ref file) = args.file {
@@ -31,8 +29,7 @@ fn main() {
         println!("Input: stdin");
     }
 
-    match input(args.file) {
-        Ok(input) => hex_print(input),
-        Err(err) => eprint!("{:?}", err),
-    }
+    let input = input(args.file)?;
+
+    Ok(hex_print(input, &mut std::io::stdout(), args.readable)?)
 }
