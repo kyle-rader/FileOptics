@@ -47,3 +47,23 @@ fn color(b: u8, s: impl Colorize) -> ColoredString {
         _ => s.normal(),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::hex_print;
+
+    const INPUT: &[u8; 11] = b"Test Input\n";
+
+    #[test]
+    fn can_print_simple_input() {
+        let mut output = Vec::new();
+        let expected = [
+            0x35, 52, 0x20, 54, 53, 32, 55, 51, 32, 55, 52, 32, 27, 91, 51, 50, 109, 50, 48, 27,
+            91, 48, 109, 32, 52, 57, 32, 54, 101, 32, 55, 48, 32, 55, 53, 32, 55, 52, 32, 27, 91,
+            51, 53, 109, 48, 97, 27, 91, 48, 109, 32, 10,
+        ]; // includes ansi color sequences around the space and newline
+
+        hex_print(&INPUT[..], &mut output, false).expect("All printing should work");
+        assert_eq!(output, expected);
+    }
+}
