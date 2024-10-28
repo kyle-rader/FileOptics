@@ -1,7 +1,7 @@
 use std::{fs::File, io::Read};
 
 use clap::{self, Parser};
-use file_optics::show;
+use file_optics::{ascii_table, chars, show};
 
 #[derive(Debug, Parser)]
 enum Cli {
@@ -44,12 +44,11 @@ fn input(file: Option<String>) -> Result<impl Read, std::io::Error> {
 fn main() -> anyhow::Result<()> {
     let args = Cli::parse();
 
-    match args {
-        Cli::Show(ShowArgs { file, readable }) => {
-            show(input(file)?, &mut std::io::stdout(), readable)?
-        }
-        Cli::Ascii(_) => todo!(),
-        Cli::Char(char_args) => todo!(),
-    }
-    Ok(())
+    let out = &mut std::io::stdout();
+
+    Ok(match args {
+        Cli::Show(ShowArgs { file, readable }) => show(input(file)?, out, readable),
+        Cli::Ascii(_) => ascii_table(out),
+        Cli::Char(CharArgs { input }) => chars(out, input),
+    }?)
 }
