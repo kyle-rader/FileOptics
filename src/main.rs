@@ -1,7 +1,7 @@
 use std::{fs::File, io::Read};
 
 use clap::{self, Parser};
-use file_optics::hex_print;
+use file_optics::show;
 
 #[derive(Debug, Parser)]
 enum Cli {
@@ -46,9 +46,10 @@ fn main() -> anyhow::Result<()> {
 
     match args {
         Cli::Show(ShowArgs { file, readable }) => {
-            Ok(hex_print(input(file)?, &mut std::io::stdout(), readable)?)
+            show(input(file)?, &mut std::io::stdout(), readable)?
         }
-        Cli::Ascii(ascii_args) => todo!(),
+        Cli::Ascii(_) => todo!(),
         Cli::Char(char_args) => todo!(),
     }
+    Ok(())
 }
