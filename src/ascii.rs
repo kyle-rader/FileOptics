@@ -27,7 +27,6 @@ pub fn ascii_table(out: &mut impl Write) -> io::Result<()> {
 }
 
 fn print_range(out: &mut impl Write, range: impl Iterator<Item = u8>) -> io::Result<()> {
-    let (size_hint, _) = range.size_hint();
     let mut readable = String::from("char:");
     let mut base_10 = String::from("dec :");
     let mut base_16 = String::from("hex :");
