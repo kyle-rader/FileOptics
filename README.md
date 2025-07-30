@@ -6,17 +6,31 @@ This is a command line interface (cli) for looking at files and their bytes.
 
 ## Installation
 
-This tool requires the [`dotnet` cli tool](https://dotnet.microsoft.com/learn/dotnet/hello-world-tutorial/install) (version >= `5.0.201`) be installed.
+### From Source
 
-```
-dotnet tool install -g FileOptics
+This tool requires [Rust](https://rustup.rs/) to be installed.
+
+```bash
+git clone <repository-url>
+cd file-optics
+cargo build --release
 ```
 
-The tool will install globally and be accessible as `fo` on your command line.
+The binary will be available at `target/release/file_optics`.
+
+### Using Cargo
+
+```bash
+cargo install --path .
+```
+
+The tool will install and be accessible as `file_optics` on your command line.
 
 ## Usage
 
 To get help run
-```
-fo -h | --help
+```bash
+file_optics -h
+# or
+file_optics --help
 ```
