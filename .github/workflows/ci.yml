@@ -17,48 +17,48 @@ jobs:
 
     steps:
     - name: Clone
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+    - name: Setup Rust
+      uses: actions-rs/toolchain@v1
       with:
-        dotnet-version: 5.0.201
+        toolchain: stable
+        override: true
+        components: rustfmt, clippy
 
-    - name: Restore
-      run: dotnet restore
+    - name: Cache cargo registry
+      uses: actions/cache@v3
+      with:
+        path: ~/.cargo/registry
+        key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: Cache cargo index
+      uses: actions/cache@v3
+      with:
+        path: ~/.cargo/git
+        key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: Cache cargo build
+      uses: actions/cache@v3
+      with:
+        path: target
+        key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: Check formatting
+      run: cargo fmt -- --check
+
+    - name: Run clippy
+      run: cargo clippy -- -D warnings
 
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: cargo build --release
 
-    - name: Unit Test
-      run: dotnet test --no-restore --verbosity normal
-
-    - name: Package
-      run: dotnet pack -c release FileOptics/FileOptics.csproj
+    - name: Run tests
+      run: cargo test
 
     - name: Upload artifact from ubuntu
-      uses: actions/upload-artifact@v2
+      if: matrix.os == 'ubuntu-latest'
+      uses: actions/upload-artifact@v3
       with:
-        name: package-${{matrix.os}}
-        path: "*.nupkg"
-
-  publish:
-    if: startswith(github.ref, 'refs/heads/master')
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Download artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: package-ubuntu-latest
-
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.402
-
-    - name: Publish
-      env:
-        FEED: "https://api.nuget.org/v3/index.json"
-        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-      run: dotnet nuget push FileOptics*.nupkg --api-key "$NUGET_API_KEY" --source "$FEED"
+        name: file_optics-${{ matrix.os }}
+        path: target/release/file_optics
