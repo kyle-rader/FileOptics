@@ -14,11 +14,11 @@ Since this crate isn't published yet, install it from the local path:
 cargo install --path .
 ```
 
-The tool will install globally and be accessible as `file_optics` on your command line.
+The tool will install globally and be accessible as `fo` on your command line.
 
 ## Usage
 
 To get help run
 ```
-file_optics -h | --help
+fo -h | --help
 ```
